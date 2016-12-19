@@ -1,6 +1,11 @@
+//TO DO:
+//color wheel
+//url option
+//stamps
+//saving
+
 var paletteColors = ["black", "red", "yellow", "blue", "green", "lightblue"];
 var selectedColor = "";
-
 
 var canvassize = {
     default: "regular",
@@ -8,7 +13,6 @@ var canvassize = {
     value: [20, 40, 60, 80],
     name: ["xsmall", "small", "regular", "large"]
 };
-
 
 var brushsize = {
     default: "small",
@@ -18,11 +22,20 @@ var brushsize = {
 
 };
 
+var bordertype = {
+    default: "none",
+    title: "bordertype",
+    value: [0,1,2,3],
+    name: ["none","solid","dotted","dashed"]
+};
+
+//Add option to change background image of canvas to picture from URL.
+
 var brushSize = brushsize.value[0];
 var canvasX = canvassize.value[2];
 var canvasY = canvasX * .66;
 
-//Should be able to set this as canvasX...
+//Should be able to set this as canvasX:
 //parseInt((document.getElementById("size").options[document.getElementById("size").selectedIndex]).value);
 
 
@@ -34,6 +47,7 @@ function generateMenu() {
     generatePalette();
     generateDropdown(canvassize);
     generateDropdown(brushsize);
+    generateDropdown(bordertype);
     generateDisplay();//Display should show the name of the option you are hovering over.
 
 }
@@ -110,12 +124,12 @@ function changeColor(e) {
         if (selectedColor == "") {
             alert("Pick a color.");
             return;
-        }
+        }//Make this sexier.
         if (brushSize == 1) {
             e.target.nextSibling.style.backgroundColor = selectedColor;
         }
         if (brushSize == 2) {
-            e.target.nextSibling.style.backgroundColor = selectedColor;//Make this sexier.
+            e.target.nextSibling.style.backgroundColor = selectedColor;
             e.target.previousSibling.style.backgroundColor = selectedColor;
         }
         e.target.style.backgroundColor = selectedColor;
