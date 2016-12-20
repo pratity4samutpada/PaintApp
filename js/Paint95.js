@@ -206,13 +206,15 @@ function generateTextInput(){
     var button = document.createElement("INPUT");
     button.id ="submiturl";
     button.setAttribute("type","button");
-    button.value = "set";
+    button.value = "reset";
     button.addEventListener("click",setCanvasImg);
     document.getElementById("menu").appendChild(button);
 }
 
 function setCanvasImg(){
     var url = document.getElementById("url").value;
+    if (url=="" || url.length <10 ){alert("Enter an image URL before resetting!")
+        return;}
     document.getElementById("canvas").style.backgroundImage = "url("+url+")";
     var array = document.getElementsByClassName("unit");
     for (var i = 0; i < array.length; i++) {
