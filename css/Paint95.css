@@ -44,7 +44,7 @@ body {
     background-color: ghostwhite;
     border: 2px solid ghostwhite;
     position: relative;
-    bottom: -50px;
+    bottom: -70px;
     display: inline-block;
     border-radius: 50px;
 
@@ -84,6 +84,10 @@ body {
 
 }
 
+#menu #save,#load{
+    width:100px;
+}
+
 #customColor {
     display: inline-block;
     width: 100px;
@@ -110,5 +114,7 @@ body {
     background-color: transparent;
     width:100px;
 }
+
+
 
 

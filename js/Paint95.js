@@ -1,8 +1,3 @@
-//TO DO:
-//color wheel
-//url option
-//stamps
-//saving
 
 var paletteColors = ["black", "red", "yellow", "blue", "green", "purple"];
 var selectedColor = "";
@@ -18,7 +13,7 @@ var canvassize = {
         canvasY = canvasX * .66;
         var canvas = document.getElementById("canvas");
         document.body.removeChild(canvas);
-        generateCanvas();
+        generateCanvas(canvasY,canvasX,[]);
         bordertype.func(e);
         document.getElementById("bordertype").value = "none";
     }
@@ -64,7 +59,7 @@ var fillClear = {
 
 }
 
-//Add option to change background image of canvas to picture from URL.
+
 
 var brushSize = brushsize.value[0];
 var canvasX = canvassize.value[2];
@@ -85,11 +80,11 @@ function generateMenu() {
     generateDropdown(fillClear);
     generateTextInput();
     generateDisplay();
+    generateSaveLoad();
 
 }
 
-//Creates color palette based off array of colors. Colors have event listeners and are assigned a function "select".
-// Add a (pre-named) color to the array to increase the options.
+
 function generatePalette() {
     var menu = document.getElementById("menu");
     for (var i = 0; i < paletteColors.length; i++) {
@@ -222,7 +217,7 @@ function setCanvasImg(){
     }
 }
 
-function generateCanvas() {
+function generateCanvas(y,x,array) {
     var canvasMain = document.createElement("div");
     canvasMain.id = "canvas";
     canvasMain.oncontextmenu = function () {
@@ -230,28 +225,77 @@ function generateCanvas() {
     };
     document.body.appendChild(canvasMain);
 
-    for (var i = 1; i <= canvasY; i++) {
+    for (var i = 1; i <= y; i++) {
         var row = document.createElement("div");
         row.classList.add("row");
         canvasMain.appendChild(row);
 
-        for (var j = 1; j <= canvasX; j++) {
+        for (var j = 1; j <= x; j++) {
             var unit = document.createElement("div");
             unit.classList.add("unit");
             unit.classList.add("clickable");
+            if (array.length>0){
+                unit.style.backgroundColor=array[((x*(i-1))+ (j))];
+            }else{unit.style.backgroundColor = "white";}
             unit.addEventListener("mouseover", changeColor);
             unit.addEventListener("click", changeColor);
             unit.id = i + "_" + j;
             row.appendChild(unit);
-
 
         }
     }
 }
 
 
+function generateSaveLoad(){
+    var sbutton = document.createElement("INPUT");
+    sbutton.id ="save";
+    sbutton.setAttribute("type","button");
+    sbutton.value = "save";
+    sbutton.addEventListener("click",saveImage);
+    document.getElementById("menu").appendChild(sbutton);
+    var lbutton = document.createElement("INPUT");
+    lbutton.id ="load";
+    lbutton.setAttribute("type","button");
+    lbutton.value = "load";
+    lbutton.addEventListener("click",loadImage);
+    document.getElementById("menu").appendChild(lbutton);
+}
+
+
+
+function saveImage(){
+    var toSave = {size:document.getElementById('canvassize').value};
+    var array = document.getElementsByClassName("unit");
+    for(var i = 0; i < array.length; i++){
+      toSave[array[i].id] = array[i].style.backgroundColor;
+    }
+    if(document.getElementById('canvas').style.backgroundImage !=""){
+        toSave['url'] = document.getElementById("url").value;
+    }
+    var newSave = prompt("Save image as...");
+    localStorage.setItem(newSave,JSON.stringify(toSave));
+}
+
+function loadImage(){
+    var loadWhich = prompt("Load which image?");
+    var saved = JSON.parse(localStorage.getItem(loadWhich));
+    var xAxis = saved.size;
+    document.getElementById('canvassize').value = xAxis;
+    var colorValues = new Array;
+    for(var c in saved) {
+        colorValues.push(saved[c]);
+    }
+    var canvas = document.getElementById("canvas");
+    document.body.removeChild(canvas);
+    generateCanvas((xAxis*.66),xAxis,colorValues);
+    if(saved.url){
+    document.getElementById('canvas').style.backgroundImage = "url("+saved.url+")"};
+}
+
+
 function init() {
     generateMenu();
-    generateCanvas();
+    generateCanvas(canvasY,canvasX,[]);
 
 }
