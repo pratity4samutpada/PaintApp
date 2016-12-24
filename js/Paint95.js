@@ -57,7 +57,7 @@ var fillClear = {
         document.getElementById(fillClear.title).value = fillClear.default;
         }
 
-}
+};
 
 
 
